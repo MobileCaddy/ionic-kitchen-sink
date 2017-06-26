@@ -1,0 +1,17 @@
+<ion-view title="REST Calls">
+
+  <ion-nav-buttons side="right">
+      <mc-sync-spinner></mc-sync-spinner>
+  </ion-nav-buttons>
+
+	<ion-content padding="true">
+		<button class="slds-button slds-button--brand" ng-click="vm.restCall()">
+		  <b>REST Call</b>
+		</button>
+		<button class="slds-button slds-button--brand" ng-click="vm.uploadFile()">
+		  <b>File Upload Call</b>
+		</button>
+		<input class="type="file" name="file" file="vm.file" type="file">
+
+  </ion-content>
+</ion-view>
