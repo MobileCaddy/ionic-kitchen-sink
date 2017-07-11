@@ -10,24 +10,37 @@
     .module('starter.controllers')
     .controller('RestCtrl', RestCtrl);
 
-  RestCtrl.$inject = ['$ionicPopup', 'McRestService', 'logger'];
+  RestCtrl.$inject = ['$ionicLoading', '$ionicPopup', 'McRestService', 'logger'];
 
-  function RestCtrl($ionicPopup, McRestService, logger) {
+  function RestCtrl($ionicLoading, $ionicPopup, McRestService, logger) {
   	var logModule = 'app.RestCtrl';
 
   	var vm = this;
 
-  	vm.restCall = restCall;
-  	vm.uploadFile = uploadFile;
+  	vm.getLatestChatter = getLatestChatter;
+  	vm.searchRemoteContacts = searchRemoteContacts;
 
-  	function restCall(){
+
+  	/**
+  	 * Request the latest chatter post. Uses the McRestService, which itself takes
+  	 *   care of running correctly on device or on CodeFlow. McRestService also
+  	 *   takes care of aligning auth sessions.
+  	 */
+  	function getLatestChatter(){
+  		$ionicLoading.show({
+				template: 'Getting chatter post',
+				animation: 'fade-in',
+				showBackdrop: true,
+				duration: 15000
+			});
   		var obj = {
 				method: 'GET',
 				contentType: 'application/json',
 				path: '/services/data/v36.0/chatter/feeds/news/me/feed-elements'
 			};
 			McRestService.request(obj).then(function(result){
-				console.log("restCall result", result);
+				console.log("getLatestChatter result", result);
+				$ionicLoading.hide();
 				var alertPopup = $ionicPopup.alert({
 			    title: 'Last Chatter Post!',
 			    template: result.elements[0].actor.displayName + ': ' + result.elements[0].body.text
@@ -36,16 +49,39 @@
 			  	// Do Nothing
 			  });
 			}).catch(function(e){
-				logger.error("restCall error",e);
+				logger.error("getLatestChatter error",e);
 			});
   	}
 
-  	function uploadFile() {
-  		// fileUpload.uploadFileToUrl(file);
-			McRestService.upload(vm.file).then(function(result){
-				console.log("restCall result", result);
+
+  	/**
+  	 * Use the McRestService to request an online "LIKE" search for contacts, based
+  	 *   upon input from the UI
+  	 */
+  	function searchRemoteContacts(){
+  		$ionicLoading.show({
+				template: 'Searching Salesforce',
+				animation: 'fade-in',
+				showBackdrop: true,
+				duration: 15000
+			});
+  		var soql = "SELECT name, id FROM Contact WHERE name LIKE '%" + vm.contactSearchStr + "%'";
+			McRestService.query(soql).then(function(result){
+				console.log("searchRemoteContacts result", result);
+				$ionicLoading.hide();
+				if ( result.records.length == 0 ) {
+					var alertPopup = $ionicPopup.alert({
+				    title: 'No contacts found!',
+				    template: 'No match for "' +  vm.contactSearchStr + '"'
+				  });
+				  alertPopup.then(function(res) {
+				  	// Do Nothing
+				  });
+				} else {
+					vm.contacts = result.records;
+				}
 			}).catch(function(e){
-				logger.error("restCall error",e);
+				logger.error("searchRemoteContacts error",e);
 			});
   	}
   }

@@ -121,6 +121,17 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
       }
     })
 
+    // the app audio page
+    .state('app.audio', {
+      url: '/audio',
+      views: {
+        'menuContent': {
+          templateUrl: RESOURCE_ROOT + 'templates/audio.html',
+          controller: 'AudioCtrl',
+          controllerAs: 'vm'
+        }
+      }
+    })
     // outbox
     .state('app.outbox', {
       url: '/outbox',

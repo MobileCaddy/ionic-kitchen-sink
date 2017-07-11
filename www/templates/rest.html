@@ -5,13 +5,27 @@
   </ion-nav-buttons>
 
 	<ion-content padding="true">
-		<button class="slds-button slds-button--brand" ng-click="vm.restCall()">
-		  <b>REST Call</b>
-		</button>
-		<button class="slds-button slds-button--brand" ng-click="vm.uploadFile()">
-		  <b>File Upload Call</b>
-		</button>
-		<input class="type="file" name="file" file="vm.file" type="file">
+
+		<div class="slds-box">
+			<h3>Chatter</h3>
+			<button class="slds-button slds-button--brand" ng-click="vm.getLatestChatter()">
+			  Get latest Chatter Post
+			</button>
+		</div>
+		<div class="slds-box">
+			<h3>SOQL</h3>
+			<input type="text" ng-model="vm.contactSearchStr" class="slds-input" placeholder="Contact name">
+			<button class="slds-button slds-button--brand" ng-click="vm.searchRemoteContacts()">
+			  <b>Search remote contacts</b>
+			</button>
+			<ion-list class="remoteContactlist">
+				<ion-item class="item-icon-right" ng-repeat="contact in vm.contacts">
+					<h3>{{contact.Name}}</h3>
+					<p><stong>ID:</stong>{{contact.Id}}</p>
+				</ion-item>
+			</ion-list>
+		</div>
+
 
   </ion-content>
 </ion-view>

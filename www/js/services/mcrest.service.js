@@ -13,39 +13,33 @@
     .module('starter.services')
     .factory('McRestService', McRestService);
 
-  McRestService.$inject = ['devUtils', 'logger', '$http'];
+  McRestService.$inject = ['devUtils', 'logger', '$http', 'syncRefresh', 'appDataUtils'];
 
-  function McRestService(devUtils, logger, $http) {
+  function McRestService(devUtils, logger, $http, syncRefresh,appDataUtils) {
 
     var logModule = "app.McRestService";
     var oauth;
+    var failCount = 0;
+    var apiVersion = "v36.0";
 
     return {
+      query: query,
+
       request: request,
+
+      requestBuffer: requestBuffer,
 
       upload: upload
     };
 
 
-    /**
-     * Sets up our oauth object from the appSoup. We should only need to do this
-     * every now and again as it's a singleton.
-     * TODO - Clear this if the call fails as we want to re-pull from appSoup, for
-     *        cases where accessToken has been refreshed
-     */
-    function setUpOauth() {
+    function query(soql) {
       return new Promise(function(resolve, reject) {
-        devUtils.getCachedAppSoupValue('accessToken').then(function(accessToken){
-          oauth = {'accessToken': accessToken};
-          return devUtils.getCachedAppSoupValue('refreshToken');
-        }).then(function(refreshToken){
-          oauth.refreshToken = refreshToken;
-          return devUtils.getCachedAppSoupValue('instanceUrl');
-        }).then(function(instanceUrl){
-          oauth.instanceUrl = instanceUrl;
-          resolve();
+        request({ path: '/services/data/' + apiVersion + '/query',
+                  params: {q: soql}
+        }).then(function(result){
+          resolve(result);
         }).catch(function(e){
-          oauth = null;
           logger.error(e);
           reject(e);
         });
@@ -53,41 +47,101 @@
     }
 
 
+    /**
+     * Sets up our oauth object from the appSoup. We should only need to do this
+     * every now and again as it's a singleton.
+     * TODO - At the moment we use the 'appDataUtils', but really we should provide
+     *   a non-cached read call into the devUtils. What's here is more of a proof
+     *   of concept.
+     */
+    function setUpOauth() {
+      return new Promise(function(resolve, reject) {
+        if (oauth) {
+          resolve();
+        } else {
+          console.log("Getting oauth details from appSoup");
+          appDataUtils.getCurrentValueFromAppSoup('accessToken').then(function(accessToken){
+            oauth = {'accessToken': accessToken};
+            return appDataUtils.getCurrentValueFromAppSoup('refreshToken');
+          }).then(function(refreshToken){
+            oauth.refreshToken = refreshToken;
+            return devUtils.getCachedAppSoupValue('instanceUrl');
+          }).then(function(instanceUrl){
+            oauth.instanceUrl = instanceUrl;
+            resolve();
+          }).catch(function(e){
+            oauth = null;
+            logger.error(e);
+            reject(e);
+          });
+        }
+      });
+    }
+
+
     function request(obj) {
-      if (! window.LOCAL_DEV) {
-        if (!oauth) {
+      return new Promise(function(resolve, reject) {
+        if (! window.LOCAL_DEV) {
           setUpOauth().then(function(){
             return doRequest(obj);
           }).catch(function(e){
-            logger.error(logModule, 'oauth setup failed', e);
-            return Promise.reject(e);
+            console.error(logModule, 'request failed', e);
+            if (failCount > 0) {
+              failCount = 0;
+              reject(e);
+            } else {
+              failCount ++;
+              syncRefresh.refreshToken(
+                function() {
+                  console.info("refreshToken success");
+                  return request(obj);
+                },
+                function(e) {
+                  console.error("refreshToken failed", e);
+                  reject(e);
+                }
+              );
+            }
+          }).then(function(r){
+            failCount = 0;
+            resolve(r);
+          }).catch(function(e){
+            console.error(e);
           });
-        } else {
-          return doRequest(obj);
+        } else { // Use our already instatiated forcejs
+          forcejsRequest(obj).then(function(r){
+            resolve(r);
+          }).catch(function(e){
+            console.error("doRequest", e);
+            reject(e);
+          });
         }
-      } else {
-        // Use our already instatiated forcejs
-        return forcejsRequest(obj);
-      }
+      });
     }
 
 
     function upload(file) {
-      if (! window.LOCAL_DEV) {
-        if (!oauth) {
+      return new Promise(function(resolve, reject) {
+        if (! window.LOCAL_DEV) {
           setUpOauth().then(function(){
             return doUpload(file);
+          }).then(function(result){
+            console.log(logModule, "doUpload Result", result);
+            resolve(result);
           }).catch(function(e){
             logger.error(logModule, 'oauth setup failed', e);
-            return Promise.reject(e);
+            reject(e);
           });
         } else {
-          return doUpload(file);
+          // Use our already instatiated forcejs
+          forcejsUpload(file).then(function(result){
+            resolve(result);
+          }).catch(function(e){
+            logger.error(e);
+            reject(e);
+          });
         }
-      } else {
-        // Use our already instatiated forcejs
-         return forcejsUpload(file);
-      }
+      });
     }
 
 
@@ -188,16 +242,59 @@
           data: obj.data
         }).success(function (data, status, headers, config) {
           resolve(data);
-        }).error(function (data, status, headers, config) {
-          // TODO - need to call code to refresh oauth
-          logger.error(logModule, "$http error status", status);
-          logger.error(logModule, "$http error headers", headers);
-          logger.error(logModule, "$http error config", config);
-          logger.error(logModule, "$http error data", data);
-          reject(data);
+        }).error(function (data, status, headers, config, statusText) {
+          // Weird here as looks like SF does not return CORS headers for non  200
+          if (status === 0 && !data && !statusText) {
+            oauth = null;
+            reject('$http failed with status code 0');
+          } else {
+            reject(data);
+          }
         });
       });
     }
+
+    function requestBuffer(obj){
+      return new Promise(function(resolve, reject) {
+        console.log(logModule, "oauth", oauth);
+        var method = obj.method || 'GET',
+            headers = {};
+
+        // dev friendly API: Add leading '/' if missing so url + path concat always works
+        if (obj.path.charAt(0) !== '/') {
+          obj.path = '/' + obj.path;
+        }
+
+        var url = oauth.instanceUrl + obj.path;
+
+        headers.Authorization = "Bearer " + oauth.accessToken;
+        if (obj.contentType) {
+          headers["Content-Type"] = obj.contentType;
+        }
+        console.log(logModule, "request headers: "+JSON.stringify(headers));
+        console.log(logModule, "request url: "+url);
+
+        $http({
+          headers: headers,
+          method: method,
+          url: url,
+          params: obj.params,
+          responseType: "arraybuffer",
+          data: obj.data
+        }).success(function (data, status, headers, config) {
+          resolve(data);
+        }).error(function (data, status, headers, config, statusText) {
+          // Weird here as looks like SF does not return CORS headers for non  200
+          if (status === 0 && !data && !statusText) {
+            oauth = null;
+            reject('$http failed with status code 0');
+          } else {
+            reject(data);
+          }
+        });
+      });
+    }
+
 
   }
 

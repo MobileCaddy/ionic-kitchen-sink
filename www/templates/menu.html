@@ -17,16 +17,24 @@
     </ion-header-bar>
     <ion-content>
       <ion-list>
-        <ion-item menu-close href="#/app/home">
+        <ion-item item-icon-left menu-close href="#/app/home">
+          <i class="icon ion-home slds-icon slds-icon--large"></i>
           Home
         </ion-item>
-        <ion-item menu-close href="#/app/rest">
+        <ion-item item-icon-left menu-close href="#/app/rest">
+          <i class="icon ion-person"></i>
           REST
         </ion-item>
-        <ion-item menu-close href="#/app/outbox">
+        <ion-item item-icon-left menu-close href="#/app/audio">
+          <i class="icon ion-mic-a"></i>
+          Audio
+        </ion-item>
+        <ion-item item-icon-left  menu-close href="#/app/outbox">
+          <i class="icon ion-folder"></i>
           Outbox {{vm.outboxCount}}
         </ion-item>
-        <ion-item menu-close href="#/app/settings">
+        <ion-item item-icon-left  menu-close href="#/app/settings">
+          <i class="icon ion-gear-a"></i>
           Settings
         </ion-item>
       </ion-list>

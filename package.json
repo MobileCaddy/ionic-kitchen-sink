@@ -5,7 +5,7 @@
   "mc_utils_resource": "MC_Resource_v1_1_4",
   "min_mobilecaddy_version": "1.0.58",
   "author": "MobileCaddy",
-  "description": "MobileCaddy Shell app with a side-menu using Angular and Ionic",
+  "description": "MobileCaddy KitchenSink app with a side-menu using Angular and Ionic",
   "preferGlobal": false,
   "license": "MIT",
   "devDependencies": {

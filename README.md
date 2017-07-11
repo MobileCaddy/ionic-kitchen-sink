@@ -1,8 +1,8 @@
-# MobileCaddy Shell Side Menu App
+# MobileCaddy Kicthen Sink App
 
 ## Overview
 
-This is the basic side menu shell application built with [Angular JS](https://angularjs.org/) and the [Ionic Framework](http://ionicframework.com). The idea of the MobileCaddy shell applications are to give developers a barebones starting block in getting building hybrid mobile applications with MobileCaddy.
+Shows off some demos of usage and features, and functions.
 
 ## Getting Started
 
@@ -13,11 +13,11 @@ This is the basic side menu shell application built with [Angular JS](https://an
  * sass
 
 
-* Download the [zip](https://github.com/MobileCaddy/shell-ionic-sidemenu/archive/master.zip) and unzip
+* Download the [zip](https://github.com/MobileCaddy/ionic-kitchen-sink/archive/master.zip) and unzip
 
 ```
-mv shell-ionic-sidemenu-master shell-ionic-sidemenu
-cd shell-ionic-sidemenu
+mv ionic-kitchen-sink-master ionic-kitchen-sink
+cd ionic-kitchen-sink
 ```
 
 ## What you get (prior to running any installs/grunt tasks)
