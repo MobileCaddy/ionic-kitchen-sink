@@ -9,12 +9,15 @@ $slds-dark-blue: #293F54;
 
 // Ionic overrides
 
+
 $positive:							#1D87C9;
 $item-divider-bg:				#caecd3;
 $list-header-color:			#caecd3;
 $button-light-border:		#7fd291;
 
 @import "ionic/ionic";
+
+@import "slds-menu";
 
 //  A P P    S T A R T    P A G E
 #start-page {
@@ -62,105 +65,5 @@ a.disabled {
 }
 
 
-/*  SIDE MENU */
-.menu, .menu .bar, .menu .item-content {
-  background-color: $slds-blue;
-}
-
-.menu .item {
-  border-color: $slds-dark-blue;
-  color: white;
-  font-family: SalesforceSans-Regular;
-}
-
-.item:hover {
-  text-decoration: underline;
-  color: #005fb2;
-}
 
 
-.icon {
-  width: 32px;
-  height: 32px;
-  display: inline-block;
-  top: 8px;
-  position: relative;
-  margin-top: -1em;
-  margin-right: 0.5em;
-}
-
-.icon:before {
-  content: "";
-  height: 32px;
-  width: 32px;
-  background-size: 32px 32px;
-  background-repeat: no-repeat;
-  margin: 0 -5px -5px -6px;
-  border-radius: 3px;
-  margin: 0;
-}
-
-.ion-home:before {
-  background-image: url(../icons/home.svg);
-  background-color: #5876a3;
-}
-
-
-.ion-person:before {
-  background-image: url(../icons/contact.svg);
-  background-color: #B76DB7;
-}
-
-
-.ion-folder:before {
-  background-image: url(../icons/account.svg);
-  background-color: #E78059;
-}
-
-
-.ion-gear-a:before {
-  background-image: url(../icons/settings.svg);
-}
-
-
-.ion-mic-a:before {
-  background-image: url(../icons/custom35.svg);
-  background-color: #E9637E;
-}
-
-
-.filelist .item, .remoteContactlist .item {
-  border: 0;
-  border-bottom: 2px solid #1D87C9;
-}
-
-.filelist .icon {
-  top: 1em;
-}
-
-.ion-android-download:before {
-  background-image: url(../icons/download.svg);
-  background-color: $positive;
-}
-
-.ion-checkmark:before {
-  background-image: url(../icons/check.svg);
-  background-color: #7DC37D;
-}
-
-.filelist :hover, .remoteContactlist :hover {text-decoration:none;}
-
-
-.slds-input[type="text"] {
-  background-color: white;
-  color: #16325c;
-  border: 1px solid #d8dde6;
-  border-radius: 0.25rem;
-  width: 100%;
-  transition: border 0.1s linear, background-color 0.1s linear;
-  display: inline-block;
-  padding: 0 1rem 0 0.75rem;
-  line-height: 1.875rem;
-  min-height: calc(1.875rem + (1px * 2));
-  margin-bottom: 0.2em;
-}

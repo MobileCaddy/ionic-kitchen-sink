@@ -1,0 +1,23 @@
+<ion-view title="File Examples">
+
+  <ion-nav-buttons side="right">
+      <mc-sync-spinner></mc-sync-spinner>
+  </ion-nav-buttons>
+
+	<ion-content padding="true">
+		<div class="slds-box">
+			<h3>Remote Files</h3>
+		  <button class="slds-button slds-button--brand" ng-click="vm.listRemote()">
+			  <b>Fetch Remote Listing</b>
+			</button>
+			<ion-list class="filelist">
+				<ion-item class="item-icon-right" ng-repeat="f in vm.fs" ng-click="vm.viewRemote(f, $index)">
+					<h3>{{f.name}}</h3><p><stong>ID:</stong>{{f.id}}</p><p>({{f.fileExtension}}) {{f.downloaded}}</p>
+					<i class="icon ion-android-download" ng-hide="f.downloaded == true"></i>
+					<i class="icon ion-checkmark" ng-show="f.downloaded == true"></i>
+				</ion-item>
+			</ion-list>
+		</div>
+
+  </ion-content>
+</ion-view>

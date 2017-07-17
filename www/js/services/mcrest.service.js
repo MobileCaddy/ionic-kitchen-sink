@@ -84,6 +84,9 @@
         if (! window.LOCAL_DEV) {
           setUpOauth().then(function(){
             return doRequest(obj);
+          }).then(function(r){
+            failCount = 0;
+            resolve(r);
           }).catch(function(e){
             console.error(logModule, 'request failed', e);
             if (failCount > 0) {
@@ -102,11 +105,6 @@
                 }
               );
             }
-          }).then(function(r){
-            failCount = 0;
-            resolve(r);
-          }).catch(function(e){
-            console.error(e);
           });
         } else { // Use our already instatiated forcejs
           forcejsRequest(obj).then(function(r){

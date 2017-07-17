@@ -152,11 +152,11 @@ module.exports = function(grunt) {
       },
       set3: {
         files: [ 'scss/*.scss'],
-        tasks: ['sass', 'compress:dev']
+        tasks: ['sass']
       },
       set4: {
         files: [ 'www/css/*.css'],
-        tasks: [],
+        tasks: ['compress:dev'],
         options: {
           livereload: true,
         }

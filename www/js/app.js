@@ -132,6 +132,18 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
         }
       }
     })
+    // the app files page
+    .state('app.files', {
+      url: '/files',
+      views: {
+        'menuContent': {
+          templateUrl: RESOURCE_ROOT + 'templates/files.html',
+          controller: 'FileCtrl',
+          controllerAs: 'vm'
+        }
+      }
+    })
+
     // outbox
     .state('app.outbox', {
       url: '/outbox',
