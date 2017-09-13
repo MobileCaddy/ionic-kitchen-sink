@@ -10,9 +10,9 @@
     .module('starter.controllers')
     .controller('SettingsCtrl', SettingsCtrl);
 
-	SettingsCtrl.$inject = ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', 'devUtils', 'vsnUtils', 'DevService', 'logger', 'SyncService', 'RecoveryService', 'NetworkService', '$timeout', 'OutboxService'];
+	SettingsCtrl.$inject = ['$scope', '$rootScope', '$ionicPopup', '$ionicLoading', '$location', '$filter', 'devUtils', 'vsnUtils', 'DevService', 'logger', 'SyncService', 'RecoveryService', 'NetworkService', '$timeout', 'OutboxService'];
 
-	function SettingsCtrl($scope, $rootScope, $ionicPopup, $ionicLoading, $location, devUtils, vsnUtils, DevService, logger, SyncService, RecoveryService, NetworkService, $timeout, OutboxService) {
+	function SettingsCtrl($scope, $rootScope, $ionicPopup, $ionicLoading, $location, $filter, devUtils, vsnUtils, DevService, logger, SyncService, RecoveryService, NetworkService, $timeout, OutboxService) {
 
 		/**
 		 * Sync Now Stuff For Sync Now Button On Settings Page
@@ -326,16 +326,18 @@
 	  };
 
 	  $scope.showConfirmLogout = function() {
-	   var confirmPopup = $ionicPopup.confirm({
-	     title: 'Logout',
-	     template: 'Are you sure you want to logout?'
-	   });
-	   confirmPopup.then(function(res) {
-	     if(res) {
-	       $rootScope.adminLoggedIn = null;
-	       devUtils.logout();
-	     }
-	   });
+	    var $translate = $filter('translate');
+	    var title = $translate ('LOGOUT');
+	    var confirmPopup = $ionicPopup.confirm({
+	      title:  title + '?',
+	      template: 'Are you sure you want to logout?'
+	    });
+	    confirmPopup.then(function(res) {
+	      if(res) {
+	        $rootScope.adminLoggedIn = null;
+	        devUtils.logout();
+	      }
+	  	});
 	  };
 
 	  $scope.showConfirmReset = function() {
@@ -389,6 +391,23 @@
 	  $scope.logLevelChange = function() {
 	    $scope.log.levelChange = true;
 	  };
+
+	  $scope.languageChange = function() {
+	  	// console.log("languageChange");
+	    localStorage.setItem('PreferredLanguage', $scope.setting.preferredLanguage);
+	    showAlert('Success', 'A restart is needed for the preferred language change to take affect.');
+	  };
+
+	  $scope.getPreferredLanguage = function() {
+	    var preferredLanguage = localStorage.getItem("PreferredLanguage");
+	    if (preferredLanguage === null) {
+	      preferredLanguage = "en";
+	    }
+	    return preferredLanguage;
+	  };
+
+	  $scope.setting = {};
+	  $scope.setting.preferredLanguage = $scope.getPreferredLanguage();
 
   }
 

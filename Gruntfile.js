@@ -197,7 +197,8 @@ module.exports = function(grunt) {
               expand: true,
               flatten: true,
               src: ['node_modules/ionic-sdk/release/js/ionic.bundle.min.js',
-                    'node_modules/ng-cordova/dist/ng-cordova.min.js'],
+                    'node_modules/ng-cordova/dist/ng-cordova.min.js',
+                    'node_modules/angular-translate/dist/angular-translate.min.js'],
               dest: 'www/lib/js',
               filter: 'isFile'
             },

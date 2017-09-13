@@ -1,7 +1,7 @@
 
-angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 'starter.controllers', 'ngCordova'])
+angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 'starter.controllers', 'ngCordova', 'pascalprecht.translate'])
 
-.run(['$ionicPlatform', 'NetworkService', 'AppRunStatusService', 'UserService', 'SyncService' , function($ionicPlatform, NetworkService, AppRunStatusService, UserService, SyncService) {
+.run(['$ionicPlatform', 'NetworkService', 'AppRunStatusService', 'UserService', 'SyncService', 'devUtils', '$translate', function($ionicPlatform, NetworkService, AppRunStatusService, UserService, SyncService, devUtils, $translate) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -77,9 +77,54 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
     }
   });
 
+  var preferredLanguage = localStorage.getItem("PreferredLanguage");
+  if (!preferredLanguage) {
+    // Get user's locale from the App Soup.
+    // We've configured the translator using $translateProvider.registerAvailableLanguageKeys to
+    // accept locales. e.g. locale en_GB will be interpreted as language 'en'
+    // We'll save the locale in the localStorage key "PreferredLanguage" so we don't have
+    // to change a load of code elsewhere...but it's not the best way of coding
+    devUtils.getUserLocale().then(function(result){
+      if (result) {
+        preferredLanguage = result; // result is not really a language, translator will cope because we used 'registerAvailableLanguageKeys'
+      } else {
+        preferredLanguage = 'en_GB';
+      }
+      localStorage.setItem("PreferredLanguage", preferredLanguage);
+      $translate.use(preferredLanguage);
+    }).catch(function(e){
+      console.error("devUtils.getUserLocale", e);
+      preferredLanguage = 'en_GB';
+      localStorage.setItem("PreferredLanguage", preferredLanguage);
+      $translate.use(preferredLanguage);
+    });
+  } else {
+    $translate.use(preferredLanguage);
+  }
+
 }])
 
-.config(['$stateProvider', '$urlRouterProvider', '$compileProvider', function($stateProvider, $urlRouterProvider, $compileProvider) {
+.config(['$stateProvider', '$urlRouterProvider', '$compileProvider','$ionicConfigProvider', '$translateProvider', function($stateProvider, $urlRouterProvider, $compileProvider,$ionicConfigProvider, $translateProvider) {
+
+// Translations here come from a spreadsheet
+  $translateProvider.translations('en', {
+    DATE_FORMAT:'dd/MM/yyyy',
+    HOME:'Accounts',
+    CASES:'Cases',
+    LOGOUT:'Logout'
+    });
+  $translateProvider.translations('es', {
+    DATE_FORMAT:'dd/MM/yyyy',
+    HOME:'Casa',
+    CASES:'Casos',
+    LOGOUT:'Cerrar Sesión'
+  });
+  // Cater for user's locale being used for language. e.g. en_GB
+  $translateProvider.registerAvailableLanguageKeys(['en','es'], {
+    'en*': 'en',
+    'es*': 'es'
+  });
+
 
   // Un comment this line when pushing for prod.
   // $compileProvider.debugInfoEnabled(false);

@@ -25,6 +25,7 @@ www/js/controllers.js
 # Mock and dep stuff
 www/lib/js/ionic.bundle.min.js
 www/lib/js/ng-cordova.min.js
+www/lib/js/angular-translate.min.js
 www/fonts/ionicons*
 scss/ionic
 oauthcallback.html
