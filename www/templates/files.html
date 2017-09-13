@@ -12,7 +12,7 @@
 			</button>
 			<ion-list class="filelist">
 				<ion-item class="item-icon-right" ng-repeat="f in vm.fs" ng-click="vm.viewRemote(f, $index)">
-					<h3>{{f.name}}</h3><p><stong>ID:</stong>{{f.id}}</p><p>({{f.fileExtension}}) {{f.downloaded}}</p>
+					<h3>{{f.name}}</h3><p><strong>ID:</strong>{{f.id}}</p><p>({{f.fileExtension}}) {{f.downloaded}}</p>
 					<i class="icon ion-android-download" ng-hide="f.downloaded == true"></i>
 					<i class="icon ion-checkmark" ng-show="f.downloaded == true"></i>
 				</ion-item>

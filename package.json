@@ -2,7 +2,7 @@
   "name": "kitchensink",
   "version": "0.0.1",
   "sf_app_name": "KitchenSink",
-  "mc_utils_resource": "MC_Resource_v1_1_4",
+  "mc_utils_resource": "MC_Resource_v1_3_0",
   "min_mobilecaddy_version": "1.0.58",
   "author": "MobileCaddy",
   "description": "MobileCaddy KitchenSink app with a side-menu using Angular and Ionic",

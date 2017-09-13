@@ -109,6 +109,40 @@ angular.module('starter', ['ionic', 'ngIOS9UIWebViewPatch', 'starter.services', 
       }
     })
 
+    // Cases
+    .state('app.case', {
+      url: '/cases',
+      views: {
+        'menuContent': {
+          templateUrl: RESOURCE_ROOT + 'templates/cases.html',
+          controller: 'CasesCtrl',
+          controllerAs: 'vm'
+        }
+      }
+    })
+    // Single Case
+    .state('app.case-detail', {
+      url: '/case/:caseId',
+      views: {
+        'menuContent': {
+          templateUrl: RESOURCE_ROOT + 'templates/case.html',
+          controller: 'CaseCtrl',
+          controllerAs: 'vm'
+        }
+      }
+    })
+    // New Case
+    .state('app.case-new', {
+      url: '/case',
+      views: {
+        'menuContent': {
+          templateUrl: RESOURCE_ROOT + 'templates/caseNew.html',
+          controller: 'NewCaseCtrl',
+          controllerAs: 'vm'
+        }
+      }
+    })
+
     // the app rest page
     .state('app.rest', {
       url: '/rest',

@@ -1,0 +1,29 @@
+<ion-view title="Cases" cache-view="false">
+
+  <ion-nav-buttons side="right">
+  	<a href="#/app/case" class="button button-icon icon ion-plus-round">
+    </a>
+    <mc-sync-spinner></mc-sync-spinner>
+  </ion-nav-buttons>
+
+	<ion-content padding="true">
+
+		<div class="slds-box">
+			<div class="slds-form-element">
+			<div class="slds-form-element__control">
+      <input  class="slds-input" type="text" placeholder="Search" ng-model="vm.search.query">
+      </label>
+      <button class="button button-clear icon ion-close-round slds-input-icon-right" ng-click="vm.clearSearch()"></button>
+      </div>
+      </div>
+			<ion-list class="caselist">
+				<ion-item class="item-icon-right"
+				 ng-repeat="case in vm.cases | filter:vm.search.query"
+				 href="#/app/case/{{case.Id  | encodeUri}}">
+					<h3>Case: {{case.CaseNumber}}</h3><p>{{case.Description}}</p>
+				</ion-item>
+			</ion-list>
+		</div>
+
+  </ion-content>
+</ion-view>

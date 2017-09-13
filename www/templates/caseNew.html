@@ -1,0 +1,25 @@
+<ion-view title="New Case">
+  <ion-nav-buttons side="right">
+      <mc-sync-spinner></mc-sync-spinner>
+  </ion-nav-buttons>
+
+	<ion-content padding="true">
+		<div class="slds-box">
+			<form ng-submit="vm.submitCase()">
+				<div class="slds-form-element">
+				  <label class="slds-form-element__label" for="textarea-id-01">Case Description</label>
+				  <div class="slds-form-element__control">
+				    <textarea class="slds-textarea" ng-model="vm.caseDescription">></textarea>
+				  </div>
+				</div>
+				<button
+          ngClick="Submit"
+          ng-disabled="!vm.caseDescription"
+          class="slds-button slds-button--brand">
+          Submit new case
+        </button>
+			</form>
+		</div>
+
+  </ion-content>
+</ion-view>

@@ -16,7 +16,7 @@
 }
 
 
-.icon {
+ion-side-menu .icon {
   width: 32px;
   height: 32px;
   display: inline-block;
@@ -26,7 +26,7 @@
   margin-right: 0.5em;
 }
 
-.icon:before {
+ion-side-menu .icon:before {
   content: "";
   height: 32px;
   width: 32px;
@@ -40,6 +40,12 @@
 .ion-home:before {
   background-image: url(../icons/home.svg);
   background-color: #5876a3;
+}
+
+
+.ion-briefcase:before {
+  background-image: url(../icons/case.svg);
+  background-color: #F2CF5B;
 }
 
 
@@ -70,7 +76,7 @@
   background-color: #E78059;
 }
 
-.filelist .item, .remoteContactlist .item {
+.filelist .item, .remoteContactlist .item, .caselist .item  {
   border: 0;
   border-bottom: 2px solid #1D87C9;
 }

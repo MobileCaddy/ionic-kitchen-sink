@@ -1,0 +1,15 @@
+<ion-view title="Case">
+  <ion-nav-title>
+    Case {{::vm.case.CaseNumber}}
+  </ion-nav-title>
+  <ion-nav-buttons side="right">
+      <mc-sync-spinner></mc-sync-spinner>
+  </ion-nav-buttons>
+
+	<ion-content padding="true">
+		<div class="slds-box">
+			<h3>Case: {{::vm.case.CaseNumber}}</h3><p>{{vm.case.Description}}</p>
+		</div>
+
+  </ion-content>
+</ion-view>

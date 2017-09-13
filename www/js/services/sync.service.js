@@ -21,13 +21,15 @@
 
 		// This is where you put your list of tables that you want from the platform
 		var appTables = [
-			{'Name': 'Account__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
-			{'Name': 'Contact__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours}
+			// {'Name': 'Account__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
+			// {'Name': 'Contact__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours},
+			{'Name': 'Case__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : fourHours}
 		];
 
 		var appTablesSyncNow = [
-			{'Name': 'Account__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
-			{'Name': 'Contact__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0}
+			// {'Name': 'Account__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
+			// {'Name': 'Contact__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0},
+			{'Name': 'Case__ap', 'syncWithoutLocalUpdates': true, 'maxTableAge' : 0}
 		];
 
 
